@@ -1,0 +1,27 @@
+{
+  "name": "ecochat-term",
+  "version": "1.0.0",
+  "description": "Discuter depuis un terminal sur Ecochat",
+  "main": "index.js",
+  "dependencies": {
+    "conf": "^10.0.1",
+    "node-fetch": "^2.6.1",
+    "prompt": "^1.1.0",
+    "terminal-kit": "^2.1.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "bin": {
+    "ecochat": "./index.js"
+  },
+  "keywords": [
+    "chat",
+    "terminal",
+    "cli"
+  ],
+  "author": "JohanStickman",
+  "license": "ISC"
+}
