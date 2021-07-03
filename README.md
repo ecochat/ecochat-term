@@ -43,7 +43,7 @@ Ouvrez un terminal et faite la commande `ecochat` pour lancer Ecochat. Une fois 
 * [prompt](https://www.npmjs.com/package/) (Assistant pour la configuration)
 * [terminal-kit](https://www.npmjs.com/package/) (Afficher des textes, couleurs, menu, demande de texte, etc)
 
-* [Ecochat](https://github.com/ecochat/website)
+* [Ecochat](https://ecochat.github.io/ecochat/docs/intro)
 
 
 ## Licence
