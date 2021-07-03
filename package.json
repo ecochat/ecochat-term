@@ -1,6 +1,6 @@
 {
   "name": "ecochat-term",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Discuter depuis un terminal sur Ecochat",
   "main": "index.js",
   "dependencies": {
@@ -23,5 +23,13 @@
     "cli"
   ],
   "author": "JohanStickman",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ecochat/ecochat-term.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ecochat/ecochat-term/issues"
+  },
+  "homepage": "https://github.com/ecochat/ecochat-term#readme"
 }
