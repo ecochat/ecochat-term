@@ -8,11 +8,20 @@ Ecochat pour terminal est un client permettant d'utiliser l'API d'Ecochat afin d
 * [nodejs et npm](https://nodejs.org) d'installé
 
 
-## Installation
+## Installation : NPMJS
+
+[Node.js et npm](https://nodejs.org) sont requis.
+
+```
+$ npm install --global ecochat-term
+```
+
+
+## Installation : Classique
 
 Assure-toi d'avoir [Node.js et npm](https://nodejs.org) d'installer sur ton appareil puis suis ces étapes dans l'ordre (tu auras peut-être besoin de redémarrer ton terminal après l'installation pour l'utiliser :
 
-- Télécharger la version que vous voulez et mettez tous les fichiers quelque part sur votre appareil
+- Télécharger tous les fichiers (index.js, fetch.js et package.json) et mettez les quelque part sur votre appareil.
 - Ouvrez un terminal dans le dossier où se trouve les fichiers téléchargés lors de la dernière étape.
 - Faite quelques commandes...
 ```

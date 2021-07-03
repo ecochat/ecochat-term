@@ -118,7 +118,7 @@ async function chat(){
 		if(list && list.error === true  && list.shortError !== "chatNoMessageFound") term.red("\n" + list.message) && process.exit()
 
 		// Changer le titre de la fenêtre du terminal
-		term.windowTitle("Ecochat | Disscution")
+		term.windowTitle("Ecochat | Discution")
 
 		// A chaque message
 		list.messages.slice(Math.max(list.messages.length - 40, 0)).forEach(msg => {
