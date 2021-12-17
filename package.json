@@ -1,6 +1,6 @@
 {
   "name": "ecochat-term",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Discuter depuis un terminal sur Ecochat",
   "main": "index.js",
   "dependencies": {
@@ -10,7 +10,6 @@
     "inquirer": "^8.1.5",
     "moment": "^2.29.1",
     "node-fetch": "^2.6.5",
-    "node-notifier": "^10.0.0",
     "ora": "^5.4.1",
     "terminal-kit": "^2.1.6"
   },
@@ -34,5 +33,5 @@
   "bugs": {
     "url": "https://github.com/ecochat/ecochat-term/issues"
   },
-  "homepage": "https://github.com/ecochat/ecochat-term#readme"
+  "homepage": "https://ecochat.github.io/ecochat"
 }
