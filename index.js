@@ -12,9 +12,20 @@ const util = require('util');
 const ora = require('ora'); const spinner = ora('');
 const client = require('./client.js');
 
+// Obtenir le chemin de la configuration
+function configPath(jsonExtension=true){
+	// (copié collé de johan-perso/twitterminal)
+	if(require('os').platform() === "win32") var configPath = require('path').join(process.env.APPDATA, "johanstickman-cli", "ecochat")
+	if(require('os').platform() === "darwin") var configPath = require('path').join(require('os').homedir(), "library", "Preferences", "johanstickman-cli", "ecochat")
+	if(require('os').platform() === "linux") var configPath = require('path').join(require('os').homedir(), ".config", "johanstickman-cli", "ecochat")
+
+	if(jsonExtension === true) configPath = require('path').join(configPath, "ecochatConfig.json")
+	return configPath;
+}
+
 // Préparer une configuration
 const Conf = require('conf');
-const config = new Conf({ configName: "ecochat", projectSuffix: "" });
+const config = new Conf({ cwd: configPath(false), configName: 'ecochatConfig' })
 
 // "Vider" l'écran
 function cleanScreen() { for (var i = 0; i < process.stdout.rows; i++) console.log() }; cleanScreen();
@@ -294,7 +305,7 @@ async function chat(){
 
 				// Envoyer le message
 				addToLog(`Envoie d'un message : ${answer?.message}`)
-				if(answer?.message?.length > 1) var send = await client.sendMessage(answer?.message?.replace(/&/g,'%26')?.replace(/#/g,'%23')); else var send = { error: true, message: "Le contenu de ce message est trop court" }
+				if(answer?.message?.length > 1) var send = await client.sendMessage(answer?.message?.replace(/&/g,'%26')?.replace(/#/g,'%23').replace(config.get('uuid'),'*** UUID censuré ***')); else var send = { error: true, message: "Le contenu de ce message est trop court" }
 				if(send?.error === true) console.log(chalk.red(send?.message)) && addToLog(`Echec d'envoie du message : ${send?.message}`)
 
 				// Dire que le message s'est envoyé
@@ -346,7 +357,6 @@ function stop() {
 	addToLog("Arrêt d'Ecochat")
 	process.exit()
 };
-
 process.on('beforeExit', () => {
 	addToLog("Arrêt d'Ecochat")
 	process.exit()
