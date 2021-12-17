@@ -5,14 +5,14 @@ Ecochat pour terminal est un client permettant d'utiliser l'API d'Ecochat afin d
 
 ## Prérequis
 
-* Un appareil sous Windows, MacOS, Linux ou ChromeOS (Avec Crostini)
-* [nodejs et npm](https://nodejs.org) d'installé
+* Un appareil sous Windows, MacOS, Linux ou ChromeOS (Avec Crostini)
+* [nodejs et npm](https://nodejs.org) d'installé
 
 
 ## Installation
 
 ```
-$ npm install --global ecochat-term
+$ npm install --global ecochat-term
 ```
 
 
