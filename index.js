@@ -68,52 +68,96 @@ var accountsInformations = editJsonFile(`${path.join(config.path, '..', 'account
 
 // Fonction pour demander un UUID
 async function askUUID(){
-	addToLog("Affichage d'explications sur les comptes Johanstickman (premier démarrage)")
-	console.log("Pour utiliser Ecochat, vous aurez besoin d'un compte Johanstickman ainsi que son UUID.")
-	console.log("Rendez-vous sur " + chalk.cyan("https://johanstickman.com/uuid") + " pour obtenir votre UUID de compte.")
+	// Préparer une variable
+	var uuid;
 
-	setTimeout(async function () {
-		// Liste des questions
-		const questions = [
-			{
-				type: 'input',
-				name: 'uuid',
-				message: 'UUID de votre compte :',
-				validate(text) {
-					if (text.length < 1) { return 'Veuillez entrer un UUID' }
-					return true;
+	// Si on est pas sous Windows/macOS
+	if(require('os').platform() !== "win32" && require('os').platform() !== "darwin"){
+		addToLog("Affichage d'explications sur les comptes Johanstickman (premier démarrage)")
+		console.log("Pour utiliser Ecochat, vous aurez besoin d'un compte Johanstickman ainsi que son UUID.")
+		console.log("Rendez-vous sur " + chalk.cyan("https://johanstickman.com/uuid") + " pour obtenir votre UUID de compte.")
+
+		setTimeout(async function () {
+			// Liste des questions
+			const questions = [
+				{
+					type: 'input',
+					name: 'uuid',
+					message: 'UUID de votre compte :',
+					validate(text) {
+						if (text.length < 1) { return 'Veuillez entrer un UUID' }
+						return true;
+					}
 				}
-			}
-		];
+			];
 
-		// Poser la question
-		var answer = await inquirer.prompt(questions)
+			// Poser la question
+			var answer = await inquirer.prompt(questions)
 
-		// Afficher un texte et un spinner
-		addToLog("Vérification de l'UUID de compte donné")
-		spinner.text = "Vérification de l'UUID"
-		spinner.start()
+			// Définir l'UUID
+			setUUID(answer?.uuid)
+		}, 2500)
+	}
 
-		// Définir l'UUID pour le client
-		var setUUID = await client.setUUID(answer?.uuid)
+	// Si on est sous Windows ou macOS
+	if(require('os').platform() === "win32" || require('os').platform() === "darwin"){
+		// Ouverture d'une page de connexion
+		addToLog("Utilisateur non connecté : ouverture d'une page de connexion")
+		console.log("Pour utiliser Ecochat, vous aurez besoin de vous connecter à l'aide de votre compte Johanstickman.")
+		await require('open')('https://johanstickman.com/login?projectName=Ecochat+pour+Terminal&redirectTo=http://127.0.0.1:3310/login-redirected&redirectBack=http://127.0.0.1:3310/login-cancelled')
+		console.log(chalk.dim("Une page de connexion s'est ouverte dans votre navigateur par défaut"))
 
-		// Si l'UUID n'a pas été défini
-		if(setUUID !== "Compte existant !"){
-			spinner.text = spinner.text = `Impossible d'accéder à votre compte : ${setUUID}`
-			return spinner.fail()
-		}
+		// Démarrer un serveur web
+			// Importer tout ce qui est lié à express
+			const express = require('express')
+			const app = express()
 
-		// Ajouter l'UUID à la configuration
-		config.set('uuid', answer?.uuid)
-		addToLog("Modification de l'UUID de compte enregistré")
+			// Démarrer le serveur web prêt à recevoir les requêtes de connexion effectué
+			app.get('/login-redirected', (req, res) => {
+				// Renvoyer une page web (pour le navigateur)
+				res.send(`<!DOCTYPE html><html class="bg-gray-800 flex h-screen"><head><title>Connexion à Ecochat</title><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0" ><link href="https://firebasestorage.googleapis.com/v0/b/storage-bf183.appspot.com/o/otherContent%2Fstyle.css?alt=media" rel="stylesheet"><script src="https://kit.fontawesome.com/4b4e1c29fe.js" crossorigin="anonymous"></script></head><body class="bg-gray-800 flex m-auto items-center" id="body"><div class="text-center w-full mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8 z-20"><h2 class="text-8xl font-extrabold"><span class="block text-green-400"><i class="far fa-check-circle"></i></span></h2><p class="text-xl mt-4 max-w-lg mx-auto text-gray-400"><b>Connexion réussie !</b><br>Vous pouvez fermer cet onglet et retourner dans votre terminal.</p><footer class="mt-4 max-w-lg mx-auto items-center p-6 footer text-neutral-content invisible md:visible"><div class="items-center grid-flow-col text-gray-400"><p>Crée par <a href="https://johanstickman.com" class="underline">Johan</a> le stickman</p></div><div class="grid-flow-col gap-4 md:place-self-center md:justify-self-end"><a href="https://twitter.com/Johan_Stickman" class="text-gray-400 hover:text-gray-200"><span class="w-6 h-6" style="font-size: 1.25em;"><i class="fab fa-twitter"></i> </span></a><a href="https://github.com/johan-perso" class="text-gray-400 hover:text-gray-200"><span class="w-6 h-6" style="font-size: 1.25em;"><i class="fab fa-github"></i> </span></a><a href="https://johanstickman.com" class="text-gray-400 hover:text-gray-200"><span class="w-6 h-6" style="font-size: 1.25em;"><i class="fas fa-globe"></i> </span></a></div></footer></div></body></html>`)
 
-		// Arrêter un spinner
-		spinner.text = "UUID validé. Veuillez redémarrer Ecochat."
-		spinner.succeed()
+				// Définir l'UUID
+				setUUID(req?.query?.uuid)
+			})
+			app.get('/login-cancelled', (req, res) => {
+				// Renvoyer une page web (pour le navigateur)
+				res.send(`<!DOCTYPE html><html class="bg-gray-800 flex h-screen"><head><title>Connexion à Ecochat</title><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0" ><link href="https://firebasestorage.googleapis.com/v0/b/storage-bf183.appspot.com/o/otherContent%2Fstyle.css?alt=media" rel="stylesheet"><script src="https://kit.fontawesome.com/4b4e1c29fe.js" crossorigin="anonymous"></script></head><body class="bg-gray-800 flex m-auto items-center" id="body"><div class="text-center w-full mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8 z-20"><h2 class="text-8xl font-extrabold"><span class="block text-red-400"><i class="far fa-times-circle"></i></span></h2><p class="text-xl mt-4 max-w-lg mx-auto text-gray-400"><b>Connexion annulée !</b><br>La connexion a été annulée, redémarrer Ecochat pour réessayer.</p><footer class="mt-4 max-w-lg mx-auto items-center p-6 footer text-neutral-content invisible md:visible"><div class="items-center grid-flow-col text-gray-400"><p>Crée par <a href="https://johanstickman.com" class="underline">Johan</a> le stickman</p></div><div class="grid-flow-col gap-4 md:place-self-center md:justify-self-end"><a href="https://twitter.com/Johan_Stickman" class="text-gray-400 hover:text-gray-200"><span class="w-6 h-6" style="font-size: 1.25em;"><i class="fab fa-twitter"></i> </span></a><a href="https://github.com/johan-perso" class="text-gray-400 hover:text-gray-200"><span class="w-6 h-6" style="font-size: 1.25em;"><i class="fab fa-github"></i> </span></a><a href="https://johanstickman.com" class="text-gray-400 hover:text-gray-200"><span class="w-6 h-6" style="font-size: 1.25em;"><i class="fas fa-globe"></i> </span></a></div></footer></div></body></html>`)
 
-		// Arrêter le processus
-		stop()
-	}, 2500)
+				// Arrêter le processus
+				console.log("\nConnexion annulée depuis le navigateur.")
+				stop()
+			})
+			app.listen(3310, () => {})
+	}
+}
+
+// Fonction pour définir un UUID (après l'avoir demandé)
+async function setUUID(uuid){
+	// Afficher un texte et un spinner
+	addToLog("Vérification de l'UUID de compte donné")
+	spinner.text = "Vérification de l'UUID"
+	spinner.start()
+
+	// Définir l'UUID pour le client
+	var setUUID = await client.setUUID(uuid)
+
+	// Si l'UUID n'a pas été défini
+	if(setUUID !== "Compte existant !"){
+		spinner.text = spinner.text = `Impossible d'accéder à votre compte : ${setUUID}`
+		return spinner.fail()
+	}
+
+	// Ajouter l'UUID à la configuration
+	config.set('uuid', uuid)
+	addToLog("Modification de l'UUID de compte enregistré")
+
+	// Arrêter un spinner
+	spinner.text = "UUID validé ! Veuillez redémarrer Ecochat."
+	spinner.succeed()
+
+	// Arrêter le processus
+	stop()
 }
 
 // Fonction pour afficher le menu principal
@@ -230,6 +274,10 @@ async function chat(){
 	typing = false;
 	var lastShowed = 0;
 
+	// Se connecter au socket de l'API
+	const { io } = require("socket.io-client");
+	var socket = io("https://ecochat-api.herokuapp.com/listenMessage");
+
 	// Afficher les messages
 	showMessages()
 	async function showMessages(restart = false){
@@ -309,7 +357,7 @@ async function chat(){
 				if(send?.error === true) console.log(chalk.red(send?.message)) && addToLog(`Echec d'envoie du message : ${send?.message}`)
 
 				// Dire que le message s'est envoyé
-				if(send?.error !== true) console.log(chalk.blueBright(send?.message.toString().replace('Message envoyé','Le message a été envoyé !')))
+				if(send?.error !== true) console.log(chalk.blueBright(send?.message.toString().replace('Message envoyé','Le message a été envoyé !')) + "\n")
 				typing = false;
 
 				// Afficher les messages
@@ -341,6 +389,20 @@ async function chat(){
 			}
 		});
 	}
+
+	// Quand un message est reçu par le socket
+	socket.on('message', async (message) => {
+		// Obtenir des informations sur l'auteur
+			// Si on a aucune information sur la personne
+			if((accountsInformations.get(message?.author?.id)) === undefined){
+				accountsInformations.set(message?.author?.id, { username: message?.author?.username, tag: message?.author?.tag })
+				accountsInformations.save();
+				addToLog("Auteur de messages inconnu trouvé : sauvegarde de ses informations pour le futur")
+			}
+
+		// Afficher le message
+		if(typing === false) console.log(chalk.greenBright(`[${message?.author?.id}]`) + chalk.bold(` ${message?.author?.username}#${message?.author?.tag}`) + ` : ${message?.message}`)
+	})
 }
 
 // Si on CTRL + C / CTRL + Z
