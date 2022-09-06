@@ -1,6 +1,6 @@
 {
   "name": "ecochat-term",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "Discuter depuis un terminal sur Ecochat",
   "main": "index.js",
   "dependencies": {
@@ -10,7 +10,7 @@
     "express": "^4.17.2",
     "inquirer": "^8.1.5",
     "moment": "^2.29.1",
-    "node-fetch": "^2.6.5",
+    "node-fetch": "^2.6.7",
     "open": "^8.4.0",
     "ora": "^5.4.1",
     "socket.io-client": "^4.4.1",
