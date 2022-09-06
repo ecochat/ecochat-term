@@ -56,7 +56,7 @@ module.exports.getInfo = async function(id){
 	if(!id) return "ID_NOT_SET";
 
 	// Obtenir des informations sur le compte
-	var request_getInfo = await fetch(`https://johanstickman.com/api/infoWithId?id=${id}`, { method: 'get' })
+	var request_getInfo = await fetch(`https://johanstick.me/api/infoWithId?id=${id}`, { method: 'get' })
 	.then(res => res.json())
 	.catch(async err => {
 		return "FETCHERR_UNABLE_GET_USERINFO"
